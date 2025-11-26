@@ -46,31 +46,47 @@ def member_menu():
             date_of_birth = input("Date of birth (YYYY-MM-DD) or press Enter to skip: ").strip() or None
             phone = input("Phone or press Enter to skip: ").strip() or None
             goal_description = input("Goal description or press Enter to skip: ").strip() or None
-            goal_target = input("Goal target (numeric) or press Enter to skip: ").strip()
-            goal_target = float(goal_target) if goal_target else None
+            goal_target = input("Goal target (numeric only) or press Enter to skip: ").strip()
+            try:
+                goal_target = float(goal_target) if goal_target else None
+            except ValueError:
+                print("Error: Goal target must be a number. Setting to None.")
+                goal_target = None
             
             register_member(first_name, last_name, date_of_birth, email, phone, goal_description, goal_target)
         
         elif choice == "2":
             # OP2: Update Member Profile
             print("\n--- Update Member Profile ---")
-            member_id = int(input("Member ID: ").strip())
+            try:
+                member_id = int(input("Member ID: ").strip())
+            except ValueError:
+                print("Error: Member ID must be a number.")
+                continue
             print("Leave blank to keep current value:")
             first_name = input("New first name: ").strip() or None
             last_name = input("New last name: ").strip() or None
             phone = input("New phone: ").strip() or None
             goal_description = input("New goal description: ").strip() or None
             goal_target = input("New goal target: ").strip()
-            goal_target = float(goal_target) if goal_target else None
+            try:
+                goal_target = float(goal_target) if goal_target else None
+            except ValueError:
+                print("Error: Goal target must be a number. Keeping current value.")
+                goal_target = None
             
             update_member_profile(member_id, first_name, last_name, phone, goal_description, goal_target)
         
         elif choice == "3":
             # OP3: Log Health Metric
             print("\n--- Log Health Metric ---")
-            member_id = int(input("Member ID: ").strip())
-            metric_type = input("Metric type (e.g., weight, heart_rate): ").strip()
-            value = float(input("Value: ").strip())
+            try:
+                member_id = int(input("Member ID: ").strip())
+                metric_type = input("Metric type (e.g., weight, heart_rate): ").strip()
+                value = float(input("Value: ").strip())
+            except ValueError:
+                print("Error: Invalid input. Member ID and Value must be numbers.")
+                continue
             recorded_at = input("Recorded at (YYYY-MM-DD HH:MM:SS) or press Enter for now: ").strip() or None
             
             log_health_metric(member_id, metric_type, value, recorded_at)
@@ -78,8 +94,12 @@ def member_menu():
         elif choice == "4":
             # OP4: Register for Class Session
             print("\n--- Register for Class Session ---")
-            member_id = int(input("Member ID: ").strip())
-            session_id = int(input("Session ID: ").strip())
+            try:
+                member_id = int(input("Member ID: ").strip())
+                session_id = int(input("Session ID: ").strip())
+            except ValueError:
+                print("Error: Member ID and Session ID must be numbers.")
+                continue
             
             register_for_class_session(member_id, session_id)
         
@@ -102,7 +122,11 @@ def trainer_menu():
         if choice == "1":
             # OP5: Set Trainer Availability
             print("\n--- Set Trainer Availability ---")
-            trainer_id = int(input("Trainer ID: ").strip())
+            try:
+                trainer_id = int(input("Trainer ID: ").strip())
+            except ValueError:
+                print("Error: Trainer ID must be a number.")
+                continue
             day_of_week = input("Day of week (e.g., Monday): ").strip()
             start_time = input("Start time (HH:MM:SS): ").strip()
             end_time = input("End time (HH:MM:SS): ").strip()
@@ -112,7 +136,11 @@ def trainer_menu():
         elif choice == "2":
             # OP6: View Trainer Schedule
             print("\n--- View Trainer Schedule ---")
-            trainer_id = int(input("Trainer ID: ").strip())
+            try:
+                trainer_id = int(input("Trainer ID: ").strip())
+            except ValueError:
+                print("Error: Trainer ID must be a number.")
+                continue
             from_date = input("From date (YYYY-MM-DD) or press Enter for today: ").strip() or None
             
             view_trainer_schedule(trainer_id, from_date)
@@ -138,59 +166,103 @@ def admin_menu():
         if choice == "1":
             # OP7: Create Class
             print("\n--- Create Class Template ---")
-            admin_id = int(input("Admin ID: ").strip())
+            try:
+                admin_id = int(input("Admin ID: ").strip())
+            except ValueError:
+                print("Error: Admin ID must be a number.")
+                continue
             name = input("Class name: ").strip()
             description = input("Description or press Enter to skip: ").strip() or None
             difficulty = input("Difficulty (Easy/Medium/Hard) or press Enter to skip: ").strip() or None
             category = input("Category or press Enter to skip: ").strip() or None
             duration = input("Duration (minutes) or press Enter to skip: ").strip()
-            duration_minutes = int(duration) if duration else None
+            try:
+                duration_minutes = int(duration) if duration else None
+            except ValueError:
+                print("Error: Duration must be a number. Setting to None.")
+                duration_minutes = None
             
             create_class(admin_id, name, description, difficulty, category, duration_minutes)
         
         elif choice == "2":
             # OP7: Update Class
             print("\n--- Update Class Template ---")
-            class_id = int(input("Class ID: ").strip())
+            try:
+                class_id = int(input("Class ID: ").strip())
+            except ValueError:
+                print("Error: Class ID must be a number.")
+                continue
             print("Leave blank to keep current value:")
             name = input("New class name: ").strip() or None
             description = input("New description: ").strip() or None
             difficulty = input("New difficulty: ").strip() or None
             category = input("New category: ").strip() or None
             duration = input("New duration (minutes): ").strip()
-            duration_minutes = int(duration) if duration else None
+            try:
+                duration_minutes = int(duration) if duration else None
+            except ValueError:
+                print("Error: Duration must be a number. Keeping current value.")
+                duration_minutes = None
             admin_id = input("New admin ID: ").strip()
-            admin_id = int(admin_id) if admin_id else None
+            try:
+                admin_id = int(admin_id) if admin_id else None
+            except ValueError:
+                print("Error: Admin ID must be a number. Keeping current value.")
+                admin_id = None
             
             update_class(class_id, name, description, difficulty, category, duration_minutes, admin_id)
         
         elif choice == "3":
             # OP8: Schedule Class Session
             print("\n--- Schedule Class Session ---")
-            class_id = int(input("Class ID: ").strip())
-            room_id = int(input("Room ID: ").strip())
-            trainer_id = int(input("Trainer ID: ").strip())
+            try:
+                class_id = int(input("Class ID: ").strip())
+                room_id = int(input("Room ID: ").strip())
+                trainer_id = int(input("Trainer ID: ").strip())
+            except ValueError:
+                print("Error: IDs must be numbers.")
+                continue
             session_date = input("Session date (YYYY-MM-DD): ").strip()
             start_time = input("Start time (HH:MM:SS): ").strip()
             end_time = input("End time (HH:MM:SS): ").strip()
-            capacity = int(input("Capacity: ").strip())
+            try:
+                capacity = int(input("Capacity: ").strip())
+            except ValueError:
+                print("Error: Capacity must be a number.")
+                continue
             
             schedule_class_session(class_id, room_id, trainer_id, session_date, start_time, end_time, capacity)
         
         elif choice == "4":
             # OP8: Reschedule Class Session
             print("\n--- Reschedule Class Session ---")
-            session_id = int(input("Session ID: ").strip())
+            try:
+                session_id = int(input("Session ID: ").strip())
+            except ValueError:
+                print("Error: Session ID must be a number.")
+                continue
             print("Leave blank to keep current value:")
             room_id = input("New room ID: ").strip()
-            room_id = int(room_id) if room_id else None
+            try:
+                room_id = int(room_id) if room_id else None
+            except ValueError:
+                print("Error: Room ID must be a number. Keeping current value.")
+                room_id = None
             trainer_id = input("New trainer ID: ").strip()
-            trainer_id = int(trainer_id) if trainer_id else None
+            try:
+                trainer_id = int(trainer_id) if trainer_id else None
+            except ValueError:
+                print("Error: Trainer ID must be a number. Keeping current value.")
+                trainer_id = None
             session_date = input("New session date (YYYY-MM-DD): ").strip() or None
             start_time = input("New start time (HH:MM:SS): ").strip() or None
             end_time = input("New end time (HH:MM:SS): ").strip() or None
             capacity = input("New capacity: ").strip()
-            capacity = int(capacity) if capacity else None
+            try:
+                capacity = int(capacity) if capacity else None
+            except ValueError:
+                print("Error: Capacity must be a number. Keeping current value.")
+                capacity = None
             
             reschedule_class_session(session_id, room_id, trainer_id, session_date, start_time, end_time, capacity)
         
