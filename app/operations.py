@@ -483,6 +483,32 @@ def reschedule_class_session(session_id, room_id=None, trainer_id=None, session_
         new_start = start_time if start_time is not None else current_start
         new_end = end_time if end_time is not None else current_end
         
+        # Check trainer availability if trainer_id is being changed or date/time is being changed
+        if trainer_id is not None or session_date is not None or start_time is not None or end_time is not None:
+            # Get the trainer_id to check (new or current)
+            check_trainer_id = trainer_id if trainer_id is not None else None
+            if check_trainer_id is None:
+                cur.execute("SELECT trainer_id FROM ClassSession WHERE session_id = %s", (session_id,))
+                check_trainer_id = cur.fetchone()[0]
+            
+            # Get day name from session_date
+            cur.execute("SELECT TO_CHAR(%s::date, 'Day')", (new_date,))
+            day_name = cur.fetchone()[0].strip()
+            
+            cur.execute("""
+                SELECT 1
+                FROM TrainerAvailability
+                WHERE trainer_id = %s
+                  AND day_of_week = %s
+                  AND %s >= start_time
+                  AND %s <= end_time
+                LIMIT 1;
+            """, (check_trainer_id, day_name, new_start, new_end))
+            
+            if not cur.fetchone():
+                print(f"Error: Trainer not available on {day_name} at that time")
+                return False
+        
         # Check room conflict (excluding current session)
         cur.execute("""
             SELECT 1
