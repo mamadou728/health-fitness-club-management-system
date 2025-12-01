@@ -311,9 +311,7 @@ All operations use parameterized SQL queries executed via `psycopg2` for securit
 
 ## Demo Video
 
-**[Add your video link here]**
-
-YouTube (Unlisted): `your_link_here`
+YouTube : `your_link_here`
 
 ### Video Contents:
 - ERD diagram walkthrough
