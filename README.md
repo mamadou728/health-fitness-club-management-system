@@ -91,73 +91,7 @@ Trainer(
 )
 ```
 
-### TrainerAvailability
-```sql
-TrainerAvailability(
-    availability_id PK,
-    trainer_id FK → Trainer(trainer_id),
-    day_of_week,
-    start_time,
-    end_time
-)
-```
-
-### AdminStaff
-```sql
-AdminStaff(
-    admin_id PK,
-    name,
-    email,
-    phone,
-    title
-)
-```
-
-### Class
-```sql
-Class(
-    class_id PK,
-    admin_id FK → AdminStaff(admin_id),
-    name,
-    description,
-    category,
-    difficulty,
-    duration,
-    assigned_since
-)
-```
-
-### Room
-```sql
-Room(
-    room_id PK,
-    room,
-    location
-)
-```
-
-### ClassSession
-```sql
-ClassSession(
-    session_id PK,
-    class_id FK → Class(class_id),
-    trainer_id FK → Trainer(trainer_id),
-    room_id FK → Room(room_id),
-    start_time,
-    end_time,
-    capacity
-)
-```
-
-### MemberClassRegistration
-```sql
-MemberClassRegistration(
-    registered_id PK,
-    member_id FK → Members(member_id),
-    session_id FK → ClassSession(session_id),
-    registration_date
-)
-```
+etc...
 
 ## Normalization
 
@@ -169,14 +103,12 @@ All tables are normalized to **Third Normal Form (3NF)**:
 
 ### Second Normal Form (2NF)
 - Satisfies 1NF
-- No partial dependencies (all primary keys are single-column)
+- No partial dependencies
 
 ### Third Normal Form (3NF)
 - Satisfies 2NF
 - No transitive dependencies
 - Every non-key attribute depends only on the primary key
-
-Each table's normalization is based on functional dependencies defined by the ERD and relational mapping.
 
 ## Project Structure
 
@@ -193,7 +125,7 @@ health-fitness-club-management-system/
 │   └── DML.sql             # Data Manipulation Language (sample data)
 │
 ├── docs/
-│   └── ERD.pdf             # Entity-Relationship Diagram
+│   └── ERD.pdf             # Entity-Relationship Diagram, Relational Mapping and Normalization
 │
 ├── requirements.txt         # Python dependencies
 └── README.md               # This file
@@ -232,7 +164,9 @@ The DDL includes:
 Load sample data:
 
 ```sql
-\i 'path/to/sql/DML.sql';
+
+\i 'C:/Users/kharo/OneDrive/Bureau/health-fitness-club-management-system/sql/DML.sql';
+
 ```
 
 ## Running the Application
@@ -241,14 +175,6 @@ Load sample data:
 
 ```bash
 pip install -r requirements.txt
-```
-
-### Configure Database Credentials
-
-Update the password in `app/operations.py`:
-
-```python
-password = "YOUR_PASSWORD"
 ```
 
 ### Start the Application
