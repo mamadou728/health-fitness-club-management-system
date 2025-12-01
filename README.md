@@ -150,7 +150,7 @@ CREATE DATABASE fitness_club;
 Execute the Data Definition Language script to create tables, triggers, views, and indexes:
 
 ```sql
-\i 'path/to/sql/DDL.sql';
+\i 'C:/Users/kharo/OneDrive/Bureau/health-fitness-club-management-system/sql//DDL.sql';
 ```
 
 The DDL includes:
