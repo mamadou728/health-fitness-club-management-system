@@ -1,59 +1,61 @@
-Health & Fitness Club Management System
+# Health & Fitness Club Management System
 
-COMP 3005 – Final Project
+**COMP 3005 – Final Project**
 
-This project implements a complete Health & Fitness Club Management System using PostgreSQL and Python.
-The system models a real fitness environment with Members, Trainers, Admin Staff, Classes, Class Sessions, Rooms, Availability, Health Metrics, and Registration tracking.
+A complete Health & Fitness Club Management System built with PostgreSQL and Python. This system models a real fitness environment with comprehensive management of members, trainers, administrators, classes, sessions, and health tracking.
 
-The project includes:
+## Table of Contents
 
-A full ERD (included as docs/ERD.pdf)
+- [Features](#features)
+- [System Components](#system-components)
+- [ER Diagram](#er-diagram)
+- [Relational Schema](#relational-schema)
+- [Normalization](#normalization)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+- [Running the Application](#running-the-application)
+- [Implemented Operations](#implemented-operations)
+- [Demo Video](#demo-video)
 
-Relational Mapping
+## Features
 
-Normalization up to 3NF
+- Full relational database design with ERD
+- Normalized to 3NF
+- Complete DDL & DML SQL scripts
+- Python CLI with 8 core database operations
+- Database triggers for data validation
+- Views and indexes for performance optimization
+- Comprehensive health metrics tracking
+- Class registration and scheduling system
 
-Complete DDL & DML SQL scripts
+## System Components
 
-Python CLI implementing 8 required database operations
+The system includes the following key entities:
 
-Triggers, Views, and Indexing
+- **Members**: User profiles with goals and personal information
+- **HealthMetric**: Timestamped health tracking (weight, heart rate, etc.)
+- **Trainer**: Training staff with specializations
+- **TrainerAvailability**: Scheduling and availability management
+- **AdminStaff**: Administrative personnel
+- **Class**: Fitness class templates with categories and difficulty levels
+- **Room**: Facility rooms and locations
+- **ClassSession**: Scheduled class instances
+- **MemberClassRegistration**: Member enrollment tracking
 
-A demonstration video
+## ER Diagram
 
-This README contains everything the TA needs to understand, run, and evaluate the system.
+The complete Entity-Relationship Diagram is available at:
 
-1. ER Diagram
-
-The full ERD is provided in:
-
+```
 /docs/ERD.pdf
+```
 
+The diagram follows standard ER notation and includes all entities, relationships, cardinalities, and attributes that reflect the implemented SQL schema.
 
-It includes all entities, relationships, cardinalities, and attributes for:
+## Relational Schema
 
-Members
-
-HealthMetric
-
-Trainer
-
-TrainerAvailability
-
-AdminStaff
-
-Class
-
-Room
-
-ClassSession
-
-MemberClassRegistration
-
-The diagram follows standard ER notation and accurately reflects the final schema implemented in SQL.
-
-2. Relational Mapping
-Members
+### Members
+```sql
 Members(
     member_id PK,
     first_name,
@@ -65,8 +67,10 @@ Members(
     goal_target,
     registration_date
 )
+```
 
-HealthMetric
+### HealthMetric
+```sql
 HealthMetric(
     metric_id PK,
     member_id FK → Members(member_id),
@@ -74,8 +78,10 @@ HealthMetric(
     value,
     recorded_at
 )
+```
 
-Trainer
+### Trainer
+```sql
 Trainer(
     trainer_id PK,
     name,
@@ -83,8 +89,10 @@ Trainer(
     phone,
     specialization
 )
+```
 
-TrainerAvailability
+### TrainerAvailability
+```sql
 TrainerAvailability(
     availability_id PK,
     trainer_id FK → Trainer(trainer_id),
@@ -92,8 +100,10 @@ TrainerAvailability(
     start_time,
     end_time
 )
+```
 
-AdminStaff
+### AdminStaff
+```sql
 AdminStaff(
     admin_id PK,
     name,
@@ -101,8 +111,10 @@ AdminStaff(
     phone,
     title
 )
+```
 
-Class
+### Class
+```sql
 Class(
     class_id PK,
     admin_id FK → AdminStaff(admin_id),
@@ -113,15 +125,19 @@ Class(
     duration,
     assigned_since
 )
+```
 
-Room
+### Room
+```sql
 Room(
     room_id PK,
     room,
     location
 )
+```
 
-ClassSession
+### ClassSession
+```sql
 ClassSession(
     session_id PK,
     class_id FK → Class(class_id),
@@ -131,176 +147,177 @@ ClassSession(
     end_time,
     capacity
 )
+```
 
-MemberClassRegistration
+### MemberClassRegistration
+```sql
 MemberClassRegistration(
     registered_id PK,
     member_id FK → Members(member_id),
     session_id FK → ClassSession(session_id),
     registration_date
 )
+```
 
-3. Normalization (Up to 3NF)
+## Normalization
 
-All tables satisfy:
+All tables are normalized to **Third Normal Form (3NF)**:
 
-✔ 1NF
+### First Normal Form (1NF)
+- All attributes contain atomic values
+- No repeating groups
 
-Atomic attributes, no repeating groups.
+### Second Normal Form (2NF)
+- Satisfies 1NF
+- No partial dependencies (all primary keys are single-column)
 
-✔ 2NF
+### Third Normal Form (3NF)
+- Satisfies 2NF
+- No transitive dependencies
+- Every non-key attribute depends only on the primary key
 
-No partial dependencies (all PKs are single-column).
+Each table's normalization is based on functional dependencies defined by the ERD and relational mapping.
 
-✔ 3NF
+## Project Structure
 
-No transitive dependencies — every non-key attribute depends only on the primary key.
-
-Normalized tables include:
-
-Members
-
-HealthMetric
-
-Trainer
-
-TrainerAvailability
-
-AdminStaff
-
-Class
-
-Room
-
-ClassSession
-
-MemberClassRegistration
-
-Each table’s full 3NF justification is based on functional dependencies defined by the ERD and included mapping.
-
-4. Project Structure
+```
 health-fitness-club-management-system/
 │
 ├── app/
-│   ├── main.py
-│   ├── operations.py
+│   ├── main.py              # Main application entry point
+│   ├── operations.py        # Database operations implementation
 │   └── __init__.py
 │
 ├── sql/
-│   ├── DDL.sql
-│   └── DML.sql
+│   ├── DDL.sql             # Data Definition Language (schema)
+│   └── DML.sql             # Data Manipulation Language (sample data)
 │
 ├── docs/
-│   └── ERD.pdf
+│   └── ERD.pdf             # Entity-Relationship Diagram
 │
-├── requirements.txt
-└── README.md   # (this file)
+├── requirements.txt         # Python dependencies
+└── README.md               # This file
+```
 
+## Setup Instructions
 
-This is the final submission structure.
+### 1. Create the Database
 
-5. Database Setup Instructions
-1. Create the database
+```sql
 CREATE DATABASE fitness_club;
+```
 
-2. Connect to it
+### 2. Connect to the Database
+
+```sql
 \c fitness_club
+```
 
-3. Run DDL (tables, triggers, view, index)
+### 3. Run DDL Script
+
+Execute the Data Definition Language script to create tables, triggers, views, and indexes:
+
+```sql
 \i 'path/to/sql/DDL.sql';
-
-4. Run DML (sample data)
-\i 'path/to/sql/DML.sql';
-
+```
 
 The DDL includes:
+- All entity tables with primary and foreign key constraints
+- Trigger for validating time ranges
+- View for summarizing class session details
+- Index for query performance optimization
 
-All entities + PK/FK constraints
+### 4. Run DML Script
 
-A trigger ensuring valid time ranges
+Load sample data:
 
-A view summarizing class session details
+```sql
+\i 'path/to/sql/DML.sql';
+```
 
-An index to improve query performance
+## Running the Application
 
-6. Python Application
-Install dependencies
+### Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-Configure PostgreSQL credentials
+### Configure Database Credentials
 
-Update inside app/operations.py:
+Update the password in `app/operations.py`:
 
+```python
 password = "YOUR_PASSWORD"
+```
 
-Run the CLI
+### Start the Application
+
+```bash
 python app/main.py
+```
 
+### Menu Interface
 
-Menu displayed:
-
+```
 HEALTH & FITNESS CLUB MANAGEMENT SYSTEM
 1. Member Operations
 2. Trainer Operations
 3. Admin Operations
 4. Exit
+```
 
-7. Implemented Operations (8 Required)
-Member Operations
+## Implemented Operations
 
-Register a new member
+### Member Operations
 
-Update member profile / goals
+1. **Register a New Member**
+   - Create member profiles with personal information and fitness goals
 
-Log health metric (weight, heart rate, etc., timestamped)
+2. **Update Member Profile/Goals**
+   - Modify member information and goal targets
 
-Register a member for a class session
+3. **Log Health Metric**
+   - Record timestamped health data (weight, heart rate, etc.)
 
-Prevents duplicates
+4. **Register for Class Session**
+   - Enroll members in scheduled classes
+   - Prevents duplicate registrations
+   - Verifies session capacity
+   - Validates session existence
 
-Verifies capacity
+### Trainer Operations
 
-Ensures session exists
+5. **Set Trainer Availability**
+   - Define trainer schedule by day and time
+   - Trigger enforces valid time ranges
+   - Prevents overlapping availability entries
 
-Trainer Operations
+6. **View Trainer Schedule**
+   - Display complete schedule with class names, rooms, and session times
 
-Set trainer availability
+### Admin Operations
 
-Trigger enforces valid time ranges
+7. **Create/Update Class Template**
+   - Manage class definitions with categories, difficulty levels, and descriptions
 
-Prevents overlapping availability entries
+8. **Schedule/Reschedule Class Session**
+   - Create or modify class session schedules
+   - Prevents room double-booking
+   - Validates trainer availability
+   - Ensures class and room exist
 
-View trainer schedule
+All operations use parameterized SQL queries executed via `psycopg2` for security and performance.
 
-Includes class name, room, session times
+## Demo Video
 
-Admin Operations
+**[Add your video link here]**
 
-Create / update a class template
+YouTube (Unlisted): `your_link_here`
 
-Schedule or reschedule a class session
-
-Prevents room double-booking
-
-Validates trainer availability
-
-Ensures class and room exist
-
-All operations use SQL queries executed via psycopg2.
-
-8. Demo Video
-
-Add link here:
-YouTube (Unlisted): your link
-
-Video includes:
-
-ERD diagram walkthrough
-
-Relational mapping + normalization summary
-
-Running DDL & DML
-
-Demonstration of all 8 operations
-
-Code overview (main and operations)
+### Video Contents:
+- ERD diagram walkthrough
+- Relational mapping and normalization summary
+- DDL and DML execution demonstration
+- Complete demonstration of all 8 operations
+- Code overview (main.py and operations.py)
