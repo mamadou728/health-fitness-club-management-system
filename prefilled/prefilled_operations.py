@@ -34,22 +34,13 @@ def prefilled_register_member():
     )
 
 
-def prefilled_update_member_profile():
-    """OP2: Update Member Profile with pre-filled data"""
+def prefilled_search_member_by_email():
+    """OP2: Search Member by Email with pre-filled data"""
     print("\nUsing pre-filled data:")
-    print(f"  Member ID: {MEMBER_UPDATE_DATA['member_id']}")
-    print(f"  New Name: {MEMBER_UPDATE_DATA['first_name']} {MEMBER_UPDATE_DATA['last_name']}")
-    print(f"  New Phone: {MEMBER_UPDATE_DATA['phone']}")
-    print(f"  New Goal: {MEMBER_UPDATE_DATA['goal_description']}")
-    print(f"  New Target: {MEMBER_UPDATE_DATA['goal_target']}")
+    print(f"  Email: {MEMBER_SEARCH_DATA['email']}")
     
-    return update_member_profile(
-        MEMBER_UPDATE_DATA['member_id'],
-        MEMBER_UPDATE_DATA['first_name'],
-        MEMBER_UPDATE_DATA['last_name'],
-        MEMBER_UPDATE_DATA['phone'],
-        MEMBER_UPDATE_DATA['goal_description'],
-        MEMBER_UPDATE_DATA['goal_target']
+    return search_member_by_email(
+        MEMBER_SEARCH_DATA['email']
     )
 
 
@@ -81,31 +72,56 @@ def prefilled_register_for_class_session():
     )
 
 
-def prefilled_set_trainer_availability():
-    """OP5: Set Trainer Availability with pre-filled data"""
-    print("\nUsing pre-filled data:")
-    print(f"  Trainer ID: {TRAINER_AVAILABILITY_DATA['trainer_id']}")
-    print(f"  Day: {TRAINER_AVAILABILITY_DATA['day_of_week']}")
-    print(f"  Time: {TRAINER_AVAILABILITY_DATA['start_time']} - {TRAINER_AVAILABILITY_DATA['end_time']}")
+def prefilled_test_trainer_availability_validation():
+    """OP5: Test Trainer Availability Validation with pre-filled data"""
+    print("\n=== Testing VALID time range (should succeed) ===")
+    print("Using pre-filled data:")
+    print(f"  Trainer ID: {TRAINER_AVAILABILITY_VALID_DATA['trainer_id']}")
+    print(f"  Day: {TRAINER_AVAILABILITY_VALID_DATA['day_of_week']}")
+    print(f"  Time: {TRAINER_AVAILABILITY_VALID_DATA['start_time']} - {TRAINER_AVAILABILITY_VALID_DATA['end_time']}")
     
-    return set_trainer_availability(
-        TRAINER_AVAILABILITY_DATA['trainer_id'],
-        TRAINER_AVAILABILITY_DATA['day_of_week'],
-        TRAINER_AVAILABILITY_DATA['start_time'],
-        TRAINER_AVAILABILITY_DATA['end_time']
+    result1 = test_trainer_availability_validation(
+        TRAINER_AVAILABILITY_VALID_DATA['trainer_id'],
+        TRAINER_AVAILABILITY_VALID_DATA['day_of_week'],
+        TRAINER_AVAILABILITY_VALID_DATA['start_time'],
+        TRAINER_AVAILABILITY_VALID_DATA['end_time']
     )
+    
+    print("\n=== Testing INVALID time range (trigger should block) ===")
+    print("Using pre-filled data:")
+    print(f"  Trainer ID: {TRAINER_AVAILABILITY_INVALID_DATA['trainer_id']}")
+    print(f"  Day: {TRAINER_AVAILABILITY_INVALID_DATA['day_of_week']}")
+    print(f"  Time: {TRAINER_AVAILABILITY_INVALID_DATA['start_time']} - {TRAINER_AVAILABILITY_INVALID_DATA['end_time']}")
+    
+    result2 = test_trainer_availability_validation(
+        TRAINER_AVAILABILITY_INVALID_DATA['trainer_id'],
+        TRAINER_AVAILABILITY_INVALID_DATA['day_of_week'],
+        TRAINER_AVAILABILITY_INVALID_DATA['start_time'],
+        TRAINER_AVAILABILITY_INVALID_DATA['end_time']
+    )
+    
+    return result1, result2
 
 
-def prefilled_view_trainer_schedule():
-    """OP6: View Trainer Schedule with pre-filled data"""
-    print("\nUsing pre-filled data:")
-    print(f"  Trainer ID: {TRAINER_SCHEDULE_DATA['trainer_id']}")
-    print(f"  From Date: Today")
+def prefilled_view_member_dashboard():
+    """OP6: View Member Dashboard with pre-filled data"""
+    print("\n=== Viewing specific member dashboard ===")
+    print("Using pre-filled data:")
+    print(f"  Member ID: {MEMBER_DASHBOARD_DATA['member_id']}")
     
-    return view_trainer_schedule(
-        TRAINER_SCHEDULE_DATA['trainer_id'],
-        TRAINER_SCHEDULE_DATA['from_date']
+    result1 = view_member_dashboard(
+        MEMBER_DASHBOARD_DATA['member_id']
     )
+    
+    print("\n=== Viewing all members dashboard ===")
+    print("Using pre-filled data:")
+    print(f"  Member ID: All members")
+    
+    result2 = view_member_dashboard(
+        MEMBER_DASHBOARD_ALL_DATA['member_id']
+    )
+    
+    return result1, result2
 
 
 def prefilled_create_class():

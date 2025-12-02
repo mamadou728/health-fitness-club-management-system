@@ -11,8 +11,8 @@ Existing DB Data Summary:
 - Sessions: 1-10 (various scheduled sessions)
 """
 
-# OP1: Register Member (NEW member - will get ID 7)
-MEMBER_DATA = {
+# OP1: Register Member
+MEMBER_DATA_SUCCESS = {
     'first_name': 'Fatima',
     'last_name': 'Ahmed',
     'date_of_birth': '2000-08-22',
@@ -22,47 +22,78 @@ MEMBER_DATA = {
     'goal_target': 68.0
 }
 
-# OP2: Update Member Profile (Update existing member #1 - Mariam)
-MEMBER_UPDATE_DATA = {
-    'member_id': 1,  # Mariam Diallo
-    'first_name': 'Mariam',
-    'last_name': 'Diallo',
-    'phone': '613-555-3099',
-    'goal_description': 'Maintain weight at 65kg',
-    'goal_target': 65.0
+MEMBER_DATA_FAILURE = {
+    'first_name': 'Duplicate',
+    'last_name': 'User',
+    'date_of_birth': '1990-01-01',
+    'email': 'mariam.diallo@example.com',  # Duplicate email - will fail
+    'phone': '613-555-9999',
+    'goal_description': 'Test duplicate',
+    'goal_target': 70.0
 }
 
-# OP3: Log Health Metric (For existing member #2 - Owen)
-HEALTH_METRIC_DATA = {
-    'member_id': 2,  # Owen Clark
+# OP2: Search Member by Email
+MEMBER_SEARCH_SUCCESS = {
+    'email': 'mariam.diallo@example.com'  # Existing member - will find
+}
+
+MEMBER_SEARCH_FAILURE = {
+    'email': 'nonexistent@example.com'  # Does not exist - will fail
+}
+
+# OP3: Log Health Metric
+HEALTH_METRIC_SUCCESS = {
+    'member_id': 2,  # Owen Clark - exists
     'metric_type': 'resting_heart_rate',
     'value': 72.0,
-    'recorded_at': None  # Will use current timestamp
+    'recorded_at': None
 }
 
-# OP4: Register for Class Session (Member #3 for Session #4)
-CLASS_REGISTRATION_DATA = {
-    'member_id': 3,  # Leila Hassan
-    'session_id': 4  # HIIT Express on 2025-11-28
+HEALTH_METRIC_FAILURE = {
+    'member_id': 9999,  # Does not exist - will fail
+    'metric_type': 'weight',
+    'value': 75.0,
+    'recorded_at': None
 }
 
-# OP5: Set Trainer Availability (NEW availability for Trainer #1 - Emily)
-TRAINER_AVAILABILITY_DATA = {
-    'trainer_id': 1,  # Emily Carter (Strength & Conditioning)
-    'day_of_week': 'Tuesday',
-    'start_time': '10:00:00',
-    'end_time': '14:00:00'
+# OP4: Register for Class Session
+CLASS_REGISTRATION_SUCCESS = {
+    'member_id': 3,  # Leila Hassan - exists
+    'session_id': 4  # HIIT Express - exists
 }
 
-# OP6: View Trainer Schedule (View for Trainer #2 - James)
-TRAINER_SCHEDULE_DATA = {
-    'trainer_id': 2,  # James Miller (Yoga & Mobility)
-    'from_date': None  # Will use current date
+CLASS_REGISTRATION_FAILURE = {
+    'member_id': 1,  # Mariam - exists
+    'session_id': 9999  # Does not exist - will fail
 }
 
-# OP7: Create Class Template (NEW class - will get ID 7)
-CLASS_CREATE_DATA = {
-    'admin_id': 1,  # Sarah Johnson (Operations Manager)
+# OP5: Test Trainer Availability Validation
+TRAINER_AVAILABILITY_SUCCESS = {
+    'trainer_id': 1,  # Emily Carter - exists
+    'day_of_week': 'Wednesday',
+    'start_time': '09:00:00',
+    'end_time': '17:00:00'  # Valid: end_time > start_time
+}
+
+TRAINER_AVAILABILITY_FAILURE = {
+    'trainer_id': 1,
+    'day_of_week': 'Thursday',
+    'start_time': '17:00:00',
+    'end_time': '09:00:00'  # Invalid: trigger blocks
+}
+
+# OP6: View Member Dashboard
+MEMBER_DASHBOARD_SUCCESS = {
+    'member_id': 1  # Mariam Diallo - exists
+}
+
+MEMBER_DASHBOARD_FAILURE = {
+    'member_id': 9999  # Does not exist - will fail
+}
+
+# OP7: Create Class Template
+CLASS_CREATE_SUCCESS = {
+    'admin_id': 1,  # Sarah Johnson - exists
     'name': 'Spin Class',
     'description': 'High-energy indoor cycling workout',
     'difficulty': 'Medium',
@@ -70,35 +101,74 @@ CLASS_CREATE_DATA = {
     'duration_minutes': 45
 }
 
-# OP7: Update Class Template (Update existing class #1 - Morning Yoga)
-CLASS_UPDATE_DATA = {
-    'class_id': 1,  # Morning Yoga
+CLASS_CREATE_FAILURE = {
+    'admin_id': 9999,  # Does not exist - will fail
+    'name': 'Invalid Class',
+    'description': 'Test failure',
+    'difficulty': 'Easy',
+    'category': 'Test',
+    'duration_minutes': 30
+}
+
+# OP7: Update Class Template
+CLASS_UPDATE_SUCCESS = {
+    'class_id': 1,  # Morning Yoga - exists
     'name': 'Morning Yoga Plus',
     'description': 'Enhanced flexibility and breathing with meditation',
     'difficulty': 'Easy',
     'category': 'Yoga',
     'duration_minutes': 75,
-    'admin_id': 3  # Amina Conte (Class Coordinator)
+    'admin_id': 3
 }
 
-# OP8: Schedule Class Session (NEW session for Class #2 - HIIT Express)
-CLASS_SESSION_SCHEDULE_DATA = {
-    'class_id': 2,  # HIIT Express
-    'room_id': 2,   # Studio B
-    'trainer_id': 3,  # Alex Nguyen (HIIT & Cardio)
+CLASS_UPDATE_FAILURE = {
+    'class_id': 9999,  # Does not exist - will fail
+    'name': 'Invalid Update',
+    'description': 'Test failure',
+    'difficulty': 'Medium',
+    'category': 'Test',
+    'duration_minutes': 60,
+    'admin_id': 1
+}
+
+# OP8: Schedule Class Session
+CLASS_SESSION_SCHEDULE_SUCCESS = {
+    'class_id': 2,  # HIIT Express - exists
+    'room_id': 2,   # Studio B - exists
+    'trainer_id': 3,  # Alex Nguyen - exists
     'session_date': '2025-12-05',
     'start_time': '18:00:00',
     'end_time': '18:45:00',
     'capacity': 25
 }
 
-# OP8: Reschedule Class Session (Reschedule existing session #10)
-CLASS_SESSION_RESCHEDULE_DATA = {
-    'session_id': 10,  # Strength Basics session
-    'room_id': 3,      # PT Room 1
-    'trainer_id': 1,   # Emily Carter
+CLASS_SESSION_SCHEDULE_FAILURE = {
+    'class_id': 9999,  # Does not exist - will fail
+    'room_id': 2,
+    'trainer_id': 3,
+    'session_date': '2025-12-05',
+    'start_time': '19:00:00',
+    'end_time': '19:45:00',
+    'capacity': 20
+}
+
+# OP8: Reschedule Class Session
+CLASS_SESSION_RESCHEDULE_SUCCESS = {
+    'session_id': 10,  # Strength Basics - exists
+    'room_id': 3,      # PT Room 1 - exists
+    'trainer_id': 1,   # Emily Carter - exists
     'session_date': '2025-12-04',
     'start_time': '15:00:00',
     'end_time': '16:00:00',
     'capacity': 15
+}
+
+CLASS_SESSION_RESCHEDULE_FAILURE = {
+    'session_id': 9999,  # Does not exist - will fail
+    'room_id': 3,
+    'trainer_id': 1,
+    'session_date': '2025-12-05',
+    'start_time': '16:00:00',
+    'end_time': '17:00:00',
+    'capacity': 10
 }

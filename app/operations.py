@@ -42,54 +42,43 @@ def register_member(first_name, last_name, date_of_birth, email, phone, goal_des
         conn.close()
 
 
-# OP2 – Update Member Profile & Goal
-def update_member_profile(member_id, first_name=None, last_name=None, phone=None, goal_description=None, goal_target=None):
+# OP2 – Search Member by Email (demonstrates INDEX: idx_member_email)
+def search_member_by_email(email):
+    """
+    Search for a member by their email address.
+    This operation benefits from the idx_member_email index for fast lookups.
+    """
     conn = get_connection()
     cur = conn.cursor()
     
     try:
-        # Check if member exists
-        cur.execute("SELECT 1 FROM Member WHERE member_id = %s", (member_id,))
-        if not cur.fetchone():
-            print(f"Error: Member ID {member_id} not found")
-            return False
+        # This query uses the idx_member_email index for optimized search
+        cur.execute("""
+            SELECT member_id, first_name, last_name, date_of_birth, email, 
+                   phone, registration_date, goal_description, goal_target
+            FROM Member
+            WHERE email = %s;
+        """, (email,))
         
-        # Build update query dynamically
-        updates = []
-        values = []
+        result = cur.fetchone()
         
-        if first_name is not None:
-            updates.append("first_name = %s")
-            values.append(first_name)
-        if last_name is not None:
-            updates.append("last_name = %s")
-            values.append(last_name)
-        if phone is not None:
-            updates.append("phone = %s")
-            values.append(phone)
-        if goal_description is not None:
-            updates.append("goal_description = %s")
-            values.append(goal_description)
-        if goal_target is not None:
-            updates.append("goal_target = %s")
-            values.append(goal_target)
-        
-        if not updates:
-            print("Error: No fields provided to update")
-            return False
-        
-        values.append(member_id)
-        query = f"UPDATE Member SET {', '.join(updates)} WHERE member_id = %s"
-        
-        cur.execute(query, values)
-        conn.commit()
-        print(f"Success! Member {member_id} profile updated")
-        return True
-        
+        if result:
+            print(f"\n✓ Member found (using indexed email search):")
+            print(f"  Member ID: {result[0]}")
+            print(f"  Name: {result[1]} {result[2]}")
+            print(f"  Email: {result[4]}")
+            print(f"  Phone: {result[5]}")
+            print(f"  DOB: {result[3]}")
+            print(f"  Registered: {result[6]}")
+            print(f"  Goal: {result[7]} (Target: {result[8]})")
+            return result
+        else:
+            print(f"✗ No member found with email: {email}")
+            return None
+            
     except Exception as e:
-        conn.rollback()
         print(f"Error: {e}")
-        return False
+        return None
     finally:
         cur.close()
         conn.close()
@@ -189,36 +178,28 @@ def register_for_class_session(member_id, session_id):
         conn.close()
 
 
-# OP5 – Set Trainer Availability
-def set_trainer_availability(trainer_id, day_of_week, start_time, end_time):
+# OP5 – Test Trainer Availability Time Validation (demonstrates TRIGGER)
+def test_trainer_availability_validation(trainer_id, day_of_week, start_time, end_time):
+    """
+    Demonstrates the trg_check_trainer_availability_time trigger.
+    The trigger validates that end_time > start_time.
+    This function will show both valid and invalid cases.
+    """
     conn = get_connection()
     cur = conn.cursor()
     
     try:
         # Check if trainer exists
-        cur.execute("SELECT 1 FROM Trainer WHERE trainer_id = %s", (trainer_id,))
-        if not cur.fetchone():
+        cur.execute("SELECT name FROM Trainer WHERE trainer_id = %s", (trainer_id,))
+        trainer = cur.fetchone()
+        if not trainer:
             print(f"Error: Trainer ID {trainer_id} not found")
             return None
         
-        # Check overlapping availability for same trainer and day
-        cur.execute("""
-            SELECT 1
-            FROM TrainerAvailability
-            WHERE trainer_id = %s
-              AND day_of_week = %s
-              AND NOT (
-                    %s >= end_time
-                    OR
-                    %s <= start_time
-                  )
-            LIMIT 1;
-        """, (trainer_id, day_of_week, start_time, end_time))
+        print(f"\n→ Attempting to set availability for Trainer {trainer_id} ({trainer[0]})")
+        print(f"  Day: {day_of_week}, Time: {start_time} - {end_time}")
         
-        if cur.fetchone():
-            print("Error: Availability overlaps with an existing time slot")
-            return None
-        
+        # This INSERT will trigger the validation
         cur.execute("""
             INSERT INTO TrainerAvailability (trainer_id, day_of_week, start_time, end_time)
             VALUES (%s, %s, %s, %s)
@@ -227,13 +208,16 @@ def set_trainer_availability(trainer_id, day_of_week, start_time, end_time):
         
         availability_id = cur.fetchone()[0]
         conn.commit()
-        print(f"Success! Availability set with ID: {availability_id}")
+        print(f"✓ SUCCESS! Trigger validation passed. Availability ID: {availability_id}")
+        print(f"  The trigger confirmed: end_time ({end_time}) > start_time ({start_time})")
         return availability_id
         
     except psycopg2.Error as e:
         conn.rollback()
-        if "end_time must be after start_time" in str(e):
-            print("Error: end_time must be after start_time")
+        error_msg = str(e)
+        if "end_time must be after start_time" in error_msg:
+            print(f"✗ TRIGGER BLOCKED: end_time must be after start_time")
+            print(f"  The trigger prevented invalid data: {end_time} <= {start_time}")
         else:
             print(f"Error: {e}")
         return None
@@ -242,46 +226,64 @@ def set_trainer_availability(trainer_id, day_of_week, start_time, end_time):
         conn.close()
 
 
-# OP6 – View Trainer Schedule (Upcoming Sessions)
-def view_trainer_schedule(trainer_id, from_date=None):
+# OP6 – View Member Dashboard (demonstrates VIEW: MemberDashboardSimple)
+def view_member_dashboard(member_id=None):
+    """
+    Query the MemberDashboardSimple view to display member statistics.
+    This view aggregates member info with their last health metric and total class registrations.
+    """
     conn = get_connection()
     cur = conn.cursor()
     
     try:
-        # Check if trainer exists
-        cur.execute("SELECT 1 FROM Trainer WHERE trainer_id = %s", (trainer_id,))
-        if not cur.fetchone():
-            print(f"Error: Trainer ID {trainer_id} not found")
-            return None
-        
-        cur.execute("""
-            SELECT
-                cs.session_id,
-                cs.session_date,
-                cs.start_time,
-                cs.end_time,
-                c.name AS class_name,
-                r.name AS room_name,
-                r.location
-            FROM ClassSession cs
-            JOIN Class c ON cs.class_id = c.class_id
-            LEFT JOIN Room r ON cs.room_id = r.room_id
-            WHERE cs.trainer_id = %s
-              AND cs.session_date >= COALESCE(%s, CURRENT_DATE)
-            ORDER BY cs.session_date, cs.start_time;
-        """, (trainer_id, from_date))
-        
-        sessions = cur.fetchall()
-        
-        if sessions:
-            print(f"\nUpcoming sessions for Trainer {trainer_id}:")
-            for session in sessions:
-                print(f"  Session {session[0]}: {session[1]} {session[2]}-{session[3]} | {session[4]} | Room: {session[5]} ({session[6]})")
+        if member_id:
+            # Query specific member from the view
+            cur.execute("""
+                SELECT member_id, first_name, last_name, goal_description, 
+                       goal_target, last_metric_value, total_classes_registered
+                FROM MemberDashboardSimple
+                WHERE member_id = %s;
+            """, (member_id,))
+            
+            result = cur.fetchone()
+            
+            if result:
+                print(f"\n=== Member Dashboard (from MemberDashboardSimple VIEW) ===")
+                print(f"Member ID: {result[0]}")
+                print(f"Name: {result[1]} {result[2]}")
+                print(f"Goal: {result[3]}")
+                print(f"Target: {result[4]}")
+                print(f"Last Metric Value: {result[5] if result[5] else 'No metrics logged'}")
+                print(f"Total Classes Registered: {result[6]}")
+                print("=" * 60)
+                return result
+            else:
+                print(f"✗ No member found with ID: {member_id}")
+                return None
         else:
-            print(f"No upcoming sessions for Trainer {trainer_id}")
-        
-        return sessions
-        
+            # Query all members from the view
+            cur.execute("""
+                SELECT member_id, first_name, last_name, goal_description, 
+                       goal_target, last_metric_value, total_classes_registered
+                FROM MemberDashboardSimple
+                ORDER BY member_id;
+            """)
+            
+            results = cur.fetchall()
+            
+            if results:
+                print(f"\n=== All Members Dashboard (from MemberDashboardSimple VIEW) ===")
+                for row in results:
+                    print(f"\n[Member {row[0]}] {row[1]} {row[2]}")
+                    print(f"  Goal: {row[3]} (Target: {row[4]})")
+                    print(f"  Last Metric: {row[5] if row[5] else 'None'}")
+                    print(f"  Classes: {row[6]}")
+                print("=" * 60)
+                return results
+            else:
+                print("No members found in the system.")
+                return []
+                
     except Exception as e:
         print(f"Error: {e}")
         return None

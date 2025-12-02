@@ -120,6 +120,11 @@ health-fitness-club-management-system/
 │   ├── operations.py        # Database operations implementation
 │   └── __init__.py
 │
+├── prefilled/
+│   ├── prefilled_data.py         # Pre-filled test data
+│   ├── prefilled_operations.py   # Pre-filled operation wrappers
+│   └── __init__.py
+│
 ├── sql/
 │   ├── DDL.sql             # Data Definition Language (schema)
 │   └── DML.sql             # Data Manipulation Language (sample data)
@@ -161,9 +166,9 @@ Execute the Data Definition Language script to create tables, triggers, views, a
 
 The DDL includes:
 - All entity tables with primary and foreign key constraints
-- Trigger for validating time ranges
-- View for summarizing class session details
-- Index for query performance optimization
+- **Trigger**: `trg_check_trainer_availability_time` for validating time ranges
+- **View**: `MemberDashboardSimple` for aggregated member statistics
+- **Index**: `idx_member_email` for optimized email searches
 
 ### 4. Run DML Script
 
@@ -199,18 +204,35 @@ HEALTH & FITNESS CLUB MANAGEMENT SYSTEM
 4. Exit
 ```
 
+### Testing with Pre-filled Data
+
+Each operation offers two modes:
+1. **Manual Entry** - Enter data interactively
+2. **Pre-filled Data** - Use pre-configured test data for quick testing
+
+Pre-filled data is especially useful for:
+- **OP2**: Testing the INDEX with an existing member email
+- **OP5**: Testing the TRIGGER with both valid and invalid time ranges
+- **OP6**: Testing the VIEW with sample member dashboards
+
+All pre-filled data is based on the sample data loaded from `DML.sql`.
+
 ## Implemented Operations
 
 ### Member Operations
 
 1. **Register a New Member**
    - Create member profiles with personal information and fitness goals
+   - Validates unique email constraint
 
-2. **Update Member Profile/Goals**
-   - Modify member information and goal targets
+2. **Search Member by Email** ⭐ *Demonstrates INDEX*
+   - Fast email-based member lookup using `idx_member_email` index
+   - Returns complete member profile information
+   - Shows performance benefit of indexed searches
 
 3. **Log Health Metric**
    - Record timestamped health data (weight, heart rate, etc.)
+   - Supports multiple metric types
 
 4. **Register for Class Session**
    - Enroll members in scheduled classes
@@ -220,24 +242,38 @@ HEALTH & FITNESS CLUB MANAGEMENT SYSTEM
 
 ### Trainer Operations
 
-5. **Set Trainer Availability**
-   - Define trainer schedule by day and time
-   - Trigger enforces valid time ranges
-   - Prevents overlapping availability entries
+5. **Test Trainer Availability Time Validation** ⭐ *Demonstrates TRIGGER*
+   - Tests the `trg_check_trainer_availability_time` trigger
+   - Validates that end_time > start_time
+   - Shows both successful validation and trigger blocking invalid data
+   - Demonstrates database-level data integrity enforcement
 
-6. **View Trainer Schedule**
-   - Display complete schedule with class names, rooms, and session times
+6. **View Member Dashboard** ⭐ *Demonstrates VIEW*
+   - Queries the `MemberDashboardSimple` view
+   - Displays aggregated member statistics:
+     - Last recorded health metric
+     - Total class registrations
+     - Goal information
+   - Can view specific member or all members
+   - Shows benefit of pre-computed aggregations
 
 ### Admin Operations
 
 7. **Create/Update Class Template**
    - Manage class definitions with categories, difficulty levels, and descriptions
+   - Tracks admin assignments and dates
 
 8. **Schedule/Reschedule Class Session**
    - Create or modify class session schedules
    - Prevents room double-booking
    - Validates trainer availability
    - Ensures class and room exist
+
+### Database Features Demonstrated
+
+- **INDEX**: `idx_member_email` on Member(email) - Fast email lookups (OP2)
+- **TRIGGER**: `trg_check_trainer_availability_time` - Time validation (OP5)
+- **VIEW**: `MemberDashboardSimple` - Aggregated member statistics (OP6)
 
 All operations use parameterized SQL queries executed via `psycopg2` for security and performance.
 

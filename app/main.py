@@ -43,7 +43,7 @@ def member_menu():
     while True:
         print("\n--- MEMBER OPERATIONS ---")
         print("1. Register New Member")
-        print("2. Update Member Profile")
+        print("2. Search Member by Email")
         print("3. Log Health Metric")
         print("4. Register for Class Session")
         print("5. Back to Main Menu")
@@ -74,31 +74,16 @@ def member_menu():
                 register_member(first_name, last_name, date_of_birth, email, phone, goal_description, goal_target)
         
         elif choice == "2":
-            # OP2: Update Member Profile
+            # OP2: Search Member by Email
             print("1. Manual Entry")
             print("2. Pre-filled Data")
             mode = input("Select mode: ").strip()
             if mode == "2":
-                prefilled_update_member_profile()
+                prefilled_search_member_by_email()
             else:
-                print("\n--- Update Member Profile ---")
-                try:
-                    member_id = int(input("Member ID: ").strip())
-                except ValueError:
-                    print("Error: Member ID must be a number.")
-                    continue
-                print("Leave blank to keep current value:")
-                first_name = input("New first name: ").strip() or None
-                last_name = input("New last name: ").strip() or None
-                phone = input("New phone: ").strip() or None
-                goal_description = input("New goal description: ").strip() or None
-                goal_target = input("New goal target: ").strip()
-                try:
-                    goal_target = float(goal_target) if goal_target else None
-                except ValueError:
-                    print("Error: Goal target must be a number. Keeping current value.")
-                    goal_target = None
-                update_member_profile(member_id, first_name, last_name, phone, goal_description, goal_target)
+                print("\n--- Search Member by Email ---")
+                email = input("Email address: ").strip()
+                search_member_by_email(email)
         
         elif choice == "3":
             # OP3: Log Health Metric
@@ -146,21 +131,21 @@ def member_menu():
 def trainer_menu():
     while True:
         print("\n--- TRAINER OPERATIONS ---")
-        print("1. Set Trainer Availability")
-        print("2. View Trainer Schedule")
+        print("1. Test Trainer Availability Validation")
+        print("2. View Member Dashboard")
         print("3. Back to Main Menu")
         
         choice = input("Select option (1-3): ").strip()
         
         if choice == "1":
-            # OP5: Set Trainer Availability
+            # OP5: Test Trainer Availability Validation
             print("1. Manual Entry")
             print("2. Pre-filled Data")
             mode = input("Select mode: ").strip()
             if mode == "2":
-                prefilled_set_trainer_availability()
+                prefilled_test_trainer_availability_validation()
             else:
-                print("\n--- Set Trainer Availability ---")
+                print("\n--- Test Trainer Availability Time Validation ---")
                 try:
                     trainer_id = int(input("Trainer ID: ").strip())
                 except ValueError:
@@ -169,24 +154,24 @@ def trainer_menu():
                 day_of_week = input("Day of week (e.g., Monday): ").strip()
                 start_time = input("Start time (HH:MM:SS): ").strip()
                 end_time = input("End time (HH:MM:SS): ").strip()
-                set_trainer_availability(trainer_id, day_of_week, start_time, end_time)
+                test_trainer_availability_validation(trainer_id, day_of_week, start_time, end_time)
         
         elif choice == "2":
-            # OP6: View Trainer Schedule
+            # OP6: View Member Dashboard
             print("1. Manual Entry")
             print("2. Pre-filled Data")
             mode = input("Select mode: ").strip()
             if mode == "2":
-                prefilled_view_trainer_schedule()
+                prefilled_view_member_dashboard()
             else:
-                print("\n--- View Trainer Schedule ---")
+                print("\n--- View Member Dashboard ---")
+                member_input = input("Member ID (or press Enter for all members): ").strip()
                 try:
-                    trainer_id = int(input("Trainer ID: ").strip())
+                    member_id = int(member_input) if member_input else None
                 except ValueError:
-                    print("Error: Trainer ID must be a number.")
+                    print("Error: Member ID must be a number.")
                     continue
-                from_date = input("From date (YYYY-MM-DD) or press Enter for today: ").strip() or None
-                view_trainer_schedule(trainer_id, from_date)
+                view_member_dashboard(member_id)
         
         elif choice == "3":
             break
