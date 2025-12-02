@@ -14,6 +14,7 @@ def get_connection():
 
 # OP1 – Member Registration
 def register_member(first_name, last_name, date_of_birth, email, phone, goal_description, goal_target):
+    """Register a new member with personal information and fitness goals."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -41,7 +42,7 @@ def register_member(first_name, last_name, date_of_birth, email, phone, goal_des
 
 # OP2 – Search Member by Email (demonstrates INDEX: idx_member_email)
 def search_member_by_email(email):
-
+    """Fast email-based member lookup using idx_member_email index."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -67,6 +68,7 @@ def search_member_by_email(email):
 
 # OP3 – Log New Health Metric
 def log_health_metric(member_id, metric_type, value, recorded_at=None):
+    """Record a timestamped health metric for a member."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -90,6 +92,7 @@ def log_health_metric(member_id, metric_type, value, recorded_at=None):
 
 # OP4 – Register Member for a Class Session
 def register_for_class_session(member_id, session_id):
+    """Enroll a member in a scheduled class session."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -113,10 +116,7 @@ def register_for_class_session(member_id, session_id):
 
 # OP5 – Trainer Availability Time Validation (demonstrates TRIGGER)
 def test_trainer_availability_validation(trainer_id, day_of_week, start_time, end_time):
-    """
-    Demonstrates the trg_check_trainer_availability_time trigger.
-    The trigger validates that end_time > start_time.
-    """
+    """Test trigger validation: end_time must be after start_time."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -143,9 +143,7 @@ def test_trainer_availability_validation(trainer_id, day_of_week, start_time, en
 
 # OP6 – View Member Dashboard (demonstrates the VIEW operation)
 def view_member_dashboard(member_id):
-    """
-    Query the MemberDashboardSimple view to display member statistics.
-    """
+    """Query MemberDashboardSimple view for aggregated member statistics."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -171,6 +169,7 @@ def view_member_dashboard(member_id):
 
 # OP7 – Admin: Create or Update a Class Template
 def create_class(admin_id, name, description=None, difficulty=None, category=None, duration_minutes=None):
+    """Create a new class template with details and admin assignment."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -194,6 +193,7 @@ def create_class(admin_id, name, description=None, difficulty=None, category=Non
 
 # OP8 – Admin: Schedule / Reschedule Class Session (Room Booking)
 def schedule_class_session(class_id, room_id, trainer_id, session_date, start_time, end_time, capacity):
+    """Schedule a class session with room booking and trainer assignment."""
     conn = get_connection()
     cur = conn.cursor()
     
@@ -210,6 +210,58 @@ def schedule_class_session(class_id, room_id, trainer_id, session_date, start_ti
         conn.rollback()
         print(f"✗ Error: {e}")
         return None
+    finally:
+        cur.close()
+        conn.close()
+
+
+# Extra operations
+def list_members():
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT member_id, first_name, last_name, email FROM Member ORDER BY member_id;")
+        results = cur.fetchall()
+        for row in results:
+            print(f"ID {row[0]}: {row[1]} {row[2]} ({row[3]})")
+        return results
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return []
+    finally:
+        cur.close()
+        conn.close()
+
+
+def list_trainers():
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT trainer_id, first_name, last_name, email FROM Trainer ORDER BY trainer_id;")
+        results = cur.fetchall()
+        for row in results:
+            print(f"ID {row[0]}: {row[1]} {row[2]} ({row[3]})")
+        return results
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return []
+    finally:
+        cur.close()
+        conn.close()
+
+
+def list_admins():
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT admin_id, first_name, last_name, email FROM Admin ORDER BY admin_id;")
+        results = cur.fetchall()
+        for row in results:
+            print(f"ID {row[0]}: {row[1]} {row[2]} ({row[3]})")
+        return results
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return []
     finally:
         cur.close()
         conn.close()
