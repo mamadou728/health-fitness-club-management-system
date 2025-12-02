@@ -208,14 +208,23 @@ HEALTH & FITNESS CLUB MANAGEMENT SYSTEM
 
 Each operation offers two modes:
 1. **Manual Entry** - Enter data interactively
-2. **Pre-filled Data** - Use pre-configured test data for quick testing
+2. **Pre-filled Data** - Automatically tests both SUCCESS and FAILURE cases
 
-Pre-filled data is especially useful for:
-- **OP2**: Testing the INDEX with an existing member email
-- **OP5**: Testing the TRIGGER with both valid and invalid time ranges
-- **OP6**: Testing the VIEW with sample member dashboards
+**Every prefilled operation tests:**
+- ✅ **SUCCESS CASE**: Valid data that should work
+- ❌ **FAILURE CASE**: Invalid data to demonstrate error handling
 
-All pre-filled data is based on the sample data loaded from `DML.sql`.
+**Examples:**
+- **OP1**: Valid registration vs. duplicate email
+- **OP2**: Existing email vs. non-existent email (INDEX)
+- **OP3**: Valid member vs. invalid member ID
+- **OP4**: Valid session vs. non-existent session
+- **OP5**: Valid times vs. invalid times blocked by TRIGGER
+- **OP6**: Existing member vs. non-existent member (VIEW)
+- **OP7**: Valid admin vs. invalid admin ID
+- **OP8**: Valid session vs. non-existent session/room
+
+This approach demonstrates comprehensive error handling and data validation across all operations.
 
 ## Implemented Operations
 
