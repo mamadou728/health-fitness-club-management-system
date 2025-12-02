@@ -22,7 +22,7 @@ A complete Health & Fitness Club Management System built with PostgreSQL and Pyt
 - Full relational database design with ERD
 - Normalized to 3NF
 - Complete DDL & DML SQL scripts
-- Python CLI with 7 core database operations
+- Python CLI with 8 core database operations
 - Database triggers for data validation
 - Views and indexes for performance optimization
 - Comprehensive health metrics tracking
@@ -208,38 +208,72 @@ Every prefilled operation demonstrates:
 - ✅ **SUCCESS CASE**: Valid data that executes successfully
 - ❌ **FAILURE CASE**: Invalid data to show error handling
 
+## Pre-filled Data System
+
+### Purpose
+The `prefilled/` directory provides automated testing data to quickly demonstrate all operations without manual input. This system is designed for rapid testing and demonstration of the application's functionality.
+
+### Why Pre-filled Data?
+- **Fast Testing**: Instantly test all 8 operations with a single selection
+- **Success & Failure Cases**: Each operation demonstrates both valid and invalid scenarios
+- **Consistency**: Same test data across all demonstrations ensures reproducible results
+- **Error Handling Demo**: Shows how the system gracefully handles bad data
+- **Database Features**: Specifically designed to showcase INDEX, TRIGGER, and VIEW functionality
+
+### Structure
+```
+prefilled/
+├── prefilled_data.py         # Test data for all operations (SUCCESS/FAILURE pairs)
+├── prefilled_operations.py   # Wrapper functions that execute operations with test data
+└── __init__.py
+```
+
+### How It Works
+1. **Data Definition** (`prefilled_data.py`): Contains dictionaries with test data for each operation
+   - Each operation has two data sets: `*_SUCCESS` and `*_FAILURE`
+   - Data is based on existing records in `DML.sql` for consistency
+
+2. **Operation Wrappers** (`prefilled_operations.py`): Functions that call actual operations with prefilled data
+   - Each wrapper runs both SUCCESS and FAILURE tests automatically
+   - Displays what data is being used before execution
+   - Shows clear results for both cases
+
+3. **Integration** (`main.py`): Menu system offers prefilled option for every operation
+   - User selects "2. Pre-filled" instead of manual entry
+   - System automatically runs both test cases
+   - Results are displayed with clear success (✓) or failure (✗) indicators
+
+### Example Usage
+When you select "Pre-filled Data" for **Search Member by Email**:
+```
+=== SUCCESS CASE ===
+Searching for: mariam.diallo@example.com
+✓ Found: Jane Smith (ID: 1, Email: mariam.diallo@example.com)
+
+=== FAILURE CASE (Non-existent Email) ===
+Searching for: nonexistent@example.com
+✗ Not found: nonexistent@example.com
+```
+
+This system makes it easy to demonstrate all functionality without repeatedly entering test data manually.
+
 ## Implemented Operations
 
-### Member Operations
+### Admin Operations
 
-1. **Register a New Member**
-   - Create member profiles with personal information and fitness goals
-   - Validates unique email constraint
+1. **Schedule Class Session**
+   - Create class session schedules with room booking
+   - Prevents room double-booking
+   - Validates trainer availability
+   - Ensures class and room exist
 
-2. **Search Member by Email** ⭐ *Demonstrates INDEX*
-   - Fast email-based member lookup using `idx_member_email` index
-   - Returns complete member profile information
-   - Shows performance benefit of indexed searches
-
-3. **Log Health Metric**
-   - Record timestamped health data (weight, heart rate, etc.)
-   - Supports multiple metric types
-
-4. **Register for Class Session**
-   - Enroll members in scheduled classes
-   - Prevents duplicate registrations
-   - Verifies session capacity
-   - Validates session existence
+2. **Create Class Template**
+   - Create class definitions with categories, difficulty levels, and descriptions
+   - Tracks admin assignments and dates
 
 ### Trainer Operations
 
-5. **Test Trainer Availability Time Validation** ⭐ *Demonstrates TRIGGER*
-   - Tests the `trg_check_trainer_availability_time` trigger
-   - Validates that end_time > start_time
-   - Shows both successful validation and trigger blocking invalid data
-   - Demonstrates database-level data integrity enforcement
-
-6. **View Member Dashboard** ⭐ *Demonstrates VIEW*
+3. **View Member Dashboard** ⭐ *Demonstrates VIEW*
    - Queries the `MemberDashboardSimple` view for a specific member
    - Displays aggregated member statistics:
      - Last recorded health metric
@@ -247,17 +281,32 @@ Every prefilled operation demonstrates:
      - Goal information
    - Shows benefit of pre-computed aggregations
 
-### Admin Operations
+4. **Test Trainer Availability Time Validation** ⭐ *Demonstrates TRIGGER*
+   - Tests the `trg_check_trainer_availability_time` trigger
+   - Validates that end_time > start_time
+   - Shows both successful validation and trigger blocking invalid data
+   - Demonstrates database-level data integrity enforcement
 
-7. **Create Class Template**
-   - Create class definitions with categories, difficulty levels, and descriptions
-   - Tracks admin assignments and dates
+### Member Operations
 
-8. **Schedule/Reschedule Class Session**
-   - Create or modify class session schedules
-   - Prevents room double-booking
-   - Validates trainer availability
-   - Ensures class and room exist
+5. **Register for Class Session**
+   - Enroll members in scheduled classes
+   - Prevents duplicate registrations
+   - Verifies session capacity
+   - Validates session existence
+
+6. **Log Health Metric**
+   - Record timestamped health data (weight, heart rate, etc.)
+   - Supports multiple metric types
+
+7. **Search Member by Email** ⭐ *Demonstrates INDEX*
+   - Fast email-based member lookup using `idx_member_email` index
+   - Returns complete member profile information
+   - Shows performance benefit of indexed searches
+
+8. **Register a New Member**
+   - Create member profiles with personal information and fitness goals
+   - Validates unique email constraint
 
 All operations use parameterized SQL queries executed via `psycopg2` for security and performance.
 
@@ -269,5 +318,5 @@ YouTube : `your_link_here`
 - ERD diagram walkthrough
 - Relational mapping and normalization summary
 - DDL and DML execution demonstration
-- Complete demonstration of all 7 operations
+- Complete demonstration of all 8 operations
 - Code overview (main.py and operations.py)

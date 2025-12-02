@@ -130,24 +130,3 @@ CLASS_SESSION_SCHEDULE_FAILURE = {
     'end_time': '19:45:00',
     'capacity': 20
 }
-
-# OP8: Reschedule Class Session
-CLASS_SESSION_RESCHEDULE_SUCCESS = {
-    'session_id': 10,  # Strength Basics - exists
-    'room_id': 3,      # PT Room 1 - exists
-    'trainer_id': 1,   # Emily Carter - exists
-    'session_date': '2025-12-04',
-    'start_time': '15:00:00',
-    'end_time': '16:00:00',
-    'capacity': 15
-}
-
-CLASS_SESSION_RESCHEDULE_FAILURE = {
-    'session_id': 9999,  # Does not exist - will fail
-    'room_id': 3,
-    'trainer_id': 1,
-    'session_date': '2025-12-05',
-    'start_time': '16:00:00',
-    'end_time': '17:00:00',
-    'capacity': 10
-}

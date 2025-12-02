@@ -99,14 +99,3 @@ def prefilled_schedule_class_session():
     print("\n=== FAILURE CASE (Invalid Class ID) ===")
     print(f"Scheduling Class ID {CLASS_SESSION_SCHEDULE_FAILURE['class_id']} on {CLASS_SESSION_SCHEDULE_FAILURE['session_date']} at {CLASS_SESSION_SCHEDULE_FAILURE['start_time']}")
     schedule_class_session(**CLASS_SESSION_SCHEDULE_FAILURE)
-
-
-def prefilled_reschedule_class_session():
-    """OP8: Reschedule Class Session - Tests success and failure"""
-    print("\n=== SUCCESS CASE ===")
-    print(f"Rescheduling Session ID {CLASS_SESSION_RESCHEDULE_SUCCESS['session_id']} to {CLASS_SESSION_RESCHEDULE_SUCCESS['session_date']} at {CLASS_SESSION_RESCHEDULE_SUCCESS['start_time']}")
-    reschedule_class_session(**CLASS_SESSION_RESCHEDULE_SUCCESS)
-    
-    print("\n=== FAILURE CASE (Invalid Session ID) ===")
-    print(f"Rescheduling Session ID {CLASS_SESSION_RESCHEDULE_FAILURE['session_id']} to {CLASS_SESSION_RESCHEDULE_FAILURE['session_date']} at {CLASS_SESSION_RESCHEDULE_FAILURE['start_time']}")
-    reschedule_class_session(**CLASS_SESSION_RESCHEDULE_FAILURE)
