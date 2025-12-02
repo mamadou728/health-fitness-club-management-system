@@ -17,17 +17,6 @@ A complete Health & Fitness Club Management System built with PostgreSQL and Pyt
 - [Implemented Operations](#implemented-operations)
 - [Demo Video](#demo-video)
 
-## Features
-
-- Full relational database design with ERD
-- Normalized to 3NF
-- Complete DDL & DML SQL scripts
-- Python CLI with 8 core database operations
-- Database triggers for data validation
-- Views and indexes for performance optimization
-- Comprehensive health metrics tracking
-- Class registration and scheduling system
-
 ## System Components
 
 The system includes the following key entities:
@@ -208,23 +197,11 @@ Every prefilled operation demonstrates:
 - ✅ **SUCCESS CASE**: Valid data that executes successfully
 - ❌ **FAILURE CASE**: Invalid data to show error handling
 
-## Pre-filled Data System
-
-### Purpose
-The `prefilled/` directory provides automated testing data to quickly demonstrate all operations without manual input. This system is designed for rapid testing and demonstration of the application's functionality.
-
-### Why Pre-filled Data?
-- **Fast Testing**: Instantly test all 8 operations with a single selection
-- **Success & Failure Cases**: Each operation demonstrates both valid and invalid scenarios
-- **Consistency**: Same test data across all demonstrations ensures reproducible results
-- **Error Handling Demo**: Shows how the system gracefully handles bad data
-- **Database Features**: Specifically designed to showcase INDEX, TRIGGER, and VIEW functionality
-
 ### Structure
 ```
 prefilled/
 ├── prefilled_data.py         # Test data for all operations (SUCCESS/FAILURE pairs)
-├── prefilled_operations.py   # Wrapper functions that execute operations with test data
+├── prefilled_operations.py   # Functions that execute operations with test data
 └── __init__.py
 ```
 
@@ -242,18 +219,6 @@ prefilled/
    - User selects "2. Pre-filled" instead of manual entry
    - System automatically runs both test cases
    - Results are displayed with clear success (✓) or failure (✗) indicators
-
-### Example Usage
-When you select "Pre-filled Data" for **Search Member by Email**:
-```
-=== SUCCESS CASE ===
-Searching for: mariam.diallo@example.com
-✓ Found: Jane Smith (ID: 1, Email: mariam.diallo@example.com)
-
-=== FAILURE CASE (Non-existent Email) ===
-Searching for: nonexistent@example.com
-✗ Not found: nonexistent@example.com
-```
 
 This system makes it easy to demonstrate all functionality without repeatedly entering test data manually.
 
@@ -273,7 +238,7 @@ This system makes it easy to demonstrate all functionality without repeatedly en
 
 ### Trainer Operations
 
-3. **View Member Dashboard** ⭐ *Demonstrates VIEW*
+3. **View Member Dashboard**  *Demonstrates VIEW*
    - Queries the `MemberDashboardSimple` view for a specific member
    - Displays aggregated member statistics:
      - Last recorded health metric
@@ -281,7 +246,7 @@ This system makes it easy to demonstrate all functionality without repeatedly en
      - Goal information
    - Shows benefit of pre-computed aggregations
 
-4. **Test Trainer Availability Time Validation** ⭐ *Demonstrates TRIGGER*
+4. **Test Trainer Availability Time Validation**  *Demonstrates TRIGGER*
    - Tests the `trg_check_trainer_availability_time` trigger
    - Validates that end_time > start_time
    - Shows both successful validation and trigger blocking invalid data
@@ -299,7 +264,7 @@ This system makes it easy to demonstrate all functionality without repeatedly en
    - Record timestamped health data (weight, heart rate, etc.)
    - Supports multiple metric types
 
-7. **Search Member by Email** ⭐ *Demonstrates INDEX*
+7. **Search Member by Email**  *Demonstrates INDEX*
    - Fast email-based member lookup using `idx_member_email` index
    - Returns complete member profile information
    - Shows performance benefit of indexed searches
