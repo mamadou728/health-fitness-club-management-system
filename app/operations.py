@@ -191,7 +191,7 @@ def create_class(admin_id, name, description=None, difficulty=None, category=Non
         conn.close()
 
 
-# OP8 – Admin: Schedule / Reschedule Class Session (Room Booking)
+# OP8 – Admin: Schedule 
 def schedule_class_session(class_id, room_id, trainer_id, session_date, start_time, end_time, capacity):
     """Schedule a class session with room booking and trainer assignment."""
     conn = get_connection()

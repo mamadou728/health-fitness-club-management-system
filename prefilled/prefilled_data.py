@@ -1,14 +1,6 @@
 """
 Pre-filled sample data for testing all operations quickly.
-Data is based on existing DML records to ensure compatibility.
 
-Existing DB Data Summary:
-- Members: 1-6 (Mariam Diallo, Owen Clark, Leila Hassan, Samuel Barton, Nadia Koulibaly, Ibrahim Sow)
-- Trainers: 1-5 (Emily, James, Alex, Rita, Daniel)
-- Admins: 1-3 (Sarah, David, Amina)
-- Rooms: 1-4 (Studio A, Studio B, PT Room 1, PT Room 2)
-- Classes: 1-6 (Morning Yoga, HIIT Express, Strength Basics, Pilates Flow, CrossFit Starter, Evening Relax Yoga)
-- Sessions: 1-10 (various scheduled sessions)
 """
 
 # OP1: Register Member
@@ -26,7 +18,7 @@ MEMBER_DATA_FAILURE = {
     'first_name': 'Duplicate',
     'last_name': 'User',
     'date_of_birth': '1990-01-01',
-    'email': 'owen.clark@example.com',  # Duplicate email - will fail
+    'email': 'owen.clark@example.com',  
     'phone': '613-555-9999',
     'goal_description': 'Test duplicate',
     'goal_target': 70.0
@@ -34,23 +26,23 @@ MEMBER_DATA_FAILURE = {
 
 # OP2: Search Member by Email
 MEMBER_SEARCH_SUCCESS = {
-    'email': 'owen.clark@example.com'  # Existing member - will find
+    'email': 'owen.clark@example.com'  
 }
 
 MEMBER_SEARCH_FAILURE = {
-    'email': 'nonexistent@example.com'  # Does not exist - will fail
+    'email': 'nonexistent@example.com'  
 }
 
 # OP3: Log Health Metric
 HEALTH_METRIC_SUCCESS = {
-    'member_id': 2,  # Owen Clark - exists
+    'member_id': 2,  
     'metric_type': 'resting_heart_rate',
     'value': 72.0,
     'recorded_at': None
 }
 
 HEALTH_METRIC_FAILURE = {
-    'member_id': 9999,  # Does not exist - will fail
+    'member_id': 9999, 
     'metric_type': 'weight',
     'value': 75.0,
     'recorded_at': None
@@ -58,42 +50,42 @@ HEALTH_METRIC_FAILURE = {
 
 # OP4: Register for Class Session
 CLASS_REGISTRATION_SUCCESS = {
-    'member_id': 3,  # Leila Hassan - exists
-    'session_id': 4  # HIIT Express - exists
+    'member_id': 3,  
+    'session_id': 4  
 }
 
 CLASS_REGISTRATION_FAILURE = {
-    'member_id': 1,  # Mariam Diallo - exists
-    'session_id': 9999  # Does not exist - will fail
+    'member_id': 1, 
+    'session_id': 9999  
 }
 
 # OP5: Test Trainer Availability Validation
 TRAINER_AVAILABILITY_SUCCESS = {
-    'trainer_id': 1,  # Emily Carter - exists
+    'trainer_id': 1,  
     'day_of_week': 'Wednesday',
     'start_time': '09:00:00',
-    'end_time': '17:00:00'  # Valid: end_time > start_time
+    'end_time': '17:00:00'  
 }
 
 TRAINER_AVAILABILITY_FAILURE = {
     'trainer_id': 1,
     'day_of_week': 'Thursday',
     'start_time': '17:00:00',
-    'end_time': '09:00:00'  # Invalid: trigger blocks
+    'end_time': '09:00:00'  
 }
 
 # OP6: View Member Dashboard
 MEMBER_DASHBOARD_SUCCESS = {
-    'member_id': 2  # Owen Clark - exists
+    'member_id': 2  
 }
 
 MEMBER_DASHBOARD_FAILURE = {
-    'member_id': 9999  # Does not exist - will fail
+    'member_id': 9999  
 }
 
 # OP7: Create Class Template
 CLASS_CREATE_SUCCESS = {
-    'admin_id': 1,  # Sarah Johnson - exists
+    'admin_id': 1,  
     'name': 'Spin Class',
     'description': 'High-energy indoor cycling workout',
     'difficulty': 'Medium',
@@ -102,7 +94,7 @@ CLASS_CREATE_SUCCESS = {
 }
 
 CLASS_CREATE_FAILURE = {
-    'admin_id': 9999,  # Does not exist - will fail
+    'admin_id': 9999,  
     'name': 'Invalid Class',
     'description': 'Test failure',
     'difficulty': 'Easy',
@@ -112,9 +104,9 @@ CLASS_CREATE_FAILURE = {
 
 # OP8: Schedule Class Session
 CLASS_SESSION_SCHEDULE_SUCCESS = {
-    'class_id': 2,  # HIIT Express - exists
-    'room_id': 2,   # Studio B - exists
-    'trainer_id': 3,  # Alex Nguyen - exists
+    'class_id': 2,  
+    'room_id': 2,  
+    'trainer_id': 3, 
     'session_date': '2025-12-05',
     'start_time': '18:00:00',
     'end_time': '18:45:00',
@@ -122,7 +114,7 @@ CLASS_SESSION_SCHEDULE_SUCCESS = {
 }
 
 CLASS_SESSION_SCHEDULE_FAILURE = {
-    'class_id': 9999,  # Does not exist - will fail
+    'class_id': 9999,  
     'room_id': 2,
     'trainer_id': 3,
     'session_date': '2025-12-05',

@@ -64,7 +64,7 @@ CREATE TABLE ClassSession (
     capacity        INT NOT NULL
 );
 
--- Many-to-many: which member registered to which class session
+-- which member registered to which class session
 CREATE TABLE MemberClassRegistration (
     registration_id SERIAL PRIMARY KEY,
     member_id       INT NOT NULL REFERENCES Member(member_id) ON DELETE CASCADE,
@@ -81,24 +81,23 @@ CREATE TABLE HealthMetric (
     recorded_at     TIMESTAMP DEFAULT NOW()
 );
 
--- Trainer weekly availability (for PT sessions and classes)
+-- Trainer weekly availability 
 CREATE TABLE TrainerAvailability (
     availability_id SERIAL PRIMARY KEY,
     trainer_id      INT NOT NULL REFERENCES Trainer(trainer_id) ON DELETE CASCADE,
-    day_of_week     VARCHAR(10) NOT NULL,    -- e.g. 'Monday'
+    day_of_week     VARCHAR(10) NOT NULL,   
     start_time      TIME NOT NULL,
     end_time        TIME NOT NULL
 );
 
 -- =========
---  INDEX (project requires at least one)
+--  INDEX: Speed up searching members by email
 -- =========
 
--- Speed up searching members by email
 CREATE INDEX idx_member_email ON Member(email);
 
 -- =========
---  VIEW (simple dashboard-style view)
+--  VIEW for member metrics
 -- =========
 
 CREATE VIEW MemberDashboardSimple AS
@@ -108,7 +107,7 @@ SELECT
     m.last_name,
     m.goal_description,
     m.goal_target,
-    -- last metric (any type) for the member
+   
     (
         SELECT hm.value
         FROM HealthMetric hm
@@ -117,6 +116,13 @@ SELECT
         LIMIT 1
     ) AS last_metric_value,
     (
+        SELECT hm.metric_type
+        FROM HealthMetric hm
+        WHERE hm.member_id = m.member_id
+        ORDER BY hm.recorded_at DESC
+        LIMIT 1
+    ) AS last_metric_type,
+    (
         SELECT COUNT(*)
         FROM MemberClassRegistration r
         WHERE r.member_id = m.member_id
@@ -124,8 +130,7 @@ SELECT
 FROM Member m;
 
 -- =========
---  TRIGGER (project requires at least one)
---  Simple rule: availability end_time must be after start_time
+--  TRIGGER: availability end_time must be after start_time
 -- =========
 
 CREATE OR REPLACE FUNCTION check_trainer_availability_time()
