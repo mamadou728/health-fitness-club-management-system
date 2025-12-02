@@ -272,11 +272,11 @@ All operations use parameterized SQL queries executed via `psycopg2` for securit
 
 ## Demo Video
 
-YouTube : `your_link_here`
+YouTube : https://youtu.be/qsY2an2XRbY
 
 ### Video Contents:
 - ERD diagram walkthrough
 - Relational mapping and normalization summary
 - DDL and DML execution demonstration
 - Complete demonstration of all 8 operations
-- Code overview (main.py and operations.py)
+- Code overview (main.py, operations.py etc...)
