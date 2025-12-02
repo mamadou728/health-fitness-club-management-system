@@ -110,27 +110,6 @@ CLASS_CREATE_FAILURE = {
     'duration_minutes': 30
 }
 
-# OP7: Update Class Template
-CLASS_UPDATE_SUCCESS = {
-    'class_id': 1,  # Morning Yoga - exists
-    'name': 'Morning Yoga Plus',
-    'description': 'Enhanced flexibility and breathing with meditation',
-    'difficulty': 'Easy',
-    'category': 'Yoga',
-    'duration_minutes': 75,
-    'admin_id': 3
-}
-
-CLASS_UPDATE_FAILURE = {
-    'class_id': 9999,  # Does not exist - will fail
-    'name': 'Invalid Update',
-    'description': 'Test failure',
-    'difficulty': 'Medium',
-    'category': 'Test',
-    'duration_minutes': 60,
-    'admin_id': 1
-}
-
 # OP8: Schedule Class Session
 CLASS_SESSION_SCHEDULE_SUCCESS = {
     'class_id': 2,  # HIIT Express - exists

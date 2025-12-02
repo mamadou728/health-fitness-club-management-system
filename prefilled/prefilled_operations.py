@@ -90,17 +90,6 @@ def prefilled_create_class():
     create_class(**CLASS_CREATE_FAILURE)
 
 
-def prefilled_update_class():
-    """OP7: Update Class - Tests success and failure"""
-    print("\n=== SUCCESS CASE ===")
-    print(f"Updating Class ID {CLASS_UPDATE_SUCCESS['class_id']} to '{CLASS_UPDATE_SUCCESS['name']}'")
-    update_class(**CLASS_UPDATE_SUCCESS)
-    
-    print("\n=== FAILURE CASE (Invalid Class ID) ===")
-    print(f"Updating Class ID {CLASS_UPDATE_FAILURE['class_id']} to '{CLASS_UPDATE_FAILURE['name']}'")
-    update_class(**CLASS_UPDATE_FAILURE)
-
-
 def prefilled_schedule_class_session():
     """OP8: Schedule Class Session - Tests success and failure"""
     print("\n=== SUCCESS CASE ===")

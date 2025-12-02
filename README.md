@@ -22,7 +22,7 @@ A complete Health & Fitness Club Management System built with PostgreSQL and Pyt
 - Full relational database design with ERD
 - Normalized to 3NF
 - Complete DDL & DML SQL scripts
-- Python CLI with 8 core database operations
+- Python CLI with 7 core database operations
 - Database triggers for data validation
 - Views and indexes for performance optimization
 - Comprehensive health metrics tracking
@@ -249,8 +249,8 @@ Every prefilled operation demonstrates:
 
 ### Admin Operations
 
-7. **Create/Update Class Template**
-   - Manage class definitions with categories, difficulty levels, and descriptions
+7. **Create Class Template**
+   - Create class definitions with categories, difficulty levels, and descriptions
    - Tracks admin assignments and dates
 
 8. **Schedule/Reschedule Class Session**
@@ -269,5 +269,5 @@ YouTube : `your_link_here`
 - ERD diagram walkthrough
 - Relational mapping and normalization summary
 - DDL and DML execution demonstration
-- Complete demonstration of all 8 operations
+- Complete demonstration of all 7 operations
 - Code overview (main.py and operations.py)
