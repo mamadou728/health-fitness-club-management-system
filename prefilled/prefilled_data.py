@@ -3,7 +3,7 @@ Pre-filled sample data for testing all operations quickly.
 Data is based on existing DML records to ensure compatibility.
 
 Existing DB Data Summary:
-- Members: 1-6 (Mariam, Owen, Leila, Samuel, Nadia, Ibrahim)
+- Members: 1-6 (Mariam Diallo, Owen Clark, Leila Hassan, Samuel Barton, Nadia Koulibaly, Ibrahim Sow)
 - Trainers: 1-5 (Emily, James, Alex, Rita, Daniel)
 - Admins: 1-3 (Sarah, David, Amina)
 - Rooms: 1-4 (Studio A, Studio B, PT Room 1, PT Room 2)
@@ -26,7 +26,7 @@ MEMBER_DATA_FAILURE = {
     'first_name': 'Duplicate',
     'last_name': 'User',
     'date_of_birth': '1990-01-01',
-    'email': 'mariam.diallo@example.com',  # Duplicate email - will fail
+    'email': 'owen.clark@example.com',  # Duplicate email - will fail
     'phone': '613-555-9999',
     'goal_description': 'Test duplicate',
     'goal_target': 70.0
@@ -34,7 +34,7 @@ MEMBER_DATA_FAILURE = {
 
 # OP2: Search Member by Email
 MEMBER_SEARCH_SUCCESS = {
-    'email': 'mariam.diallo@example.com'  # Existing member - will find
+    'email': 'owen.clark@example.com'  # Existing member - will find
 }
 
 MEMBER_SEARCH_FAILURE = {
@@ -63,7 +63,7 @@ CLASS_REGISTRATION_SUCCESS = {
 }
 
 CLASS_REGISTRATION_FAILURE = {
-    'member_id': 1,  # Mariam - exists
+    'member_id': 1,  # Mariam Diallo - exists
     'session_id': 9999  # Does not exist - will fail
 }
 
@@ -84,7 +84,7 @@ TRAINER_AVAILABILITY_FAILURE = {
 
 # OP6: View Member Dashboard
 MEMBER_DASHBOARD_SUCCESS = {
-    'member_id': 1  # Mariam Diallo - exists
+    'member_id': 2  # Owen Clark - exists
 }
 
 MEMBER_DASHBOARD_FAILURE = {

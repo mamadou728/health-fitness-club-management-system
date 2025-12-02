@@ -247,8 +247,8 @@ prefilled/
 When you select "Pre-filled Data" for **Search Member by Email**:
 ```
 === SUCCESS CASE ===
-Searching for: mariam.diallo@example.com
-✓ Found: Jane Smith (ID: 1, Email: mariam.diallo@example.com)
+Searching for: owen.clark@example.com
+✓ Found: Owen Clark (ID: 2, Email: owen.clark@example.com)
 
 === FAILURE CASE (Non-existent Email) ===
 Searching for: nonexistent@example.com
