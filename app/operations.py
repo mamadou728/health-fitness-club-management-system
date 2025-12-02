@@ -44,10 +44,7 @@ def register_member(first_name, last_name, date_of_birth, email, phone, goal_des
 
 # OP2 – Search Member by Email (demonstrates INDEX: idx_member_email)
 def search_member_by_email(email):
-    """
-    Search for a member by their email address.
-    This operation benefits from the idx_member_email index for fast lookups.
-    """
+
     conn = get_connection()
     cur = conn.cursor()
     
@@ -178,12 +175,11 @@ def register_for_class_session(member_id, session_id):
         conn.close()
 
 
-# OP5 – Test Trainer Availability Time Validation (demonstrates TRIGGER)
+# OP5 – Trainer Availability Time Validation (demonstrates TRIGGER)
 def test_trainer_availability_validation(trainer_id, day_of_week, start_time, end_time):
     """
     Demonstrates the trg_check_trainer_availability_time trigger.
     The trigger validates that end_time > start_time.
-    This function will show both valid and invalid cases.
     """
     conn = get_connection()
     cur = conn.cursor()
@@ -226,63 +222,37 @@ def test_trainer_availability_validation(trainer_id, day_of_week, start_time, en
         conn.close()
 
 
-# OP6 – View Member Dashboard (demonstrates VIEW: MemberDashboardSimple)
-def view_member_dashboard(member_id=None):
+# OP6 – View Member Dashboard (demonstrates the VIEW operation)
+def view_member_dashboard(member_id):
     """
     Query the MemberDashboardSimple view to display member statistics.
-    This view aggregates member info with their last health metric and total class registrations.
     """
     conn = get_connection()
     cur = conn.cursor()
     
     try:
-        if member_id:
-            # Query specific member from the view
-            cur.execute("""
-                SELECT member_id, first_name, last_name, goal_description, 
-                       goal_target, last_metric_value, total_classes_registered
-                FROM MemberDashboardSimple
-                WHERE member_id = %s;
-            """, (member_id,))
-            
-            result = cur.fetchone()
-            
-            if result:
-                print(f"\n=== Member Dashboard (from MemberDashboardSimple VIEW) ===")
-                print(f"Member ID: {result[0]}")
-                print(f"Name: {result[1]} {result[2]}")
-                print(f"Goal: {result[3]}")
-                print(f"Target: {result[4]}")
-                print(f"Last Metric Value: {result[5] if result[5] else 'No metrics logged'}")
-                print(f"Total Classes Registered: {result[6]}")
-                print("=" * 60)
-                return result
-            else:
-                print(f"✗ No member found with ID: {member_id}")
-                return None
+        cur.execute("""
+            SELECT member_id, first_name, last_name, goal_description, 
+                   goal_target, last_metric_value, total_classes_registered
+            FROM MemberDashboardSimple
+            WHERE member_id = %s;
+        """, (member_id,))
+        
+        result = cur.fetchone()
+        
+        if result:
+            print(f"\n=== Member Dashboard (from MemberDashboardSimple VIEW) ===")
+            print(f"Member ID: {result[0]}")
+            print(f"Name: {result[1]} {result[2]}")
+            print(f"Goal: {result[3]}")
+            print(f"Target: {result[4]}")
+            print(f"Last Metric Value: {result[5] if result[5] else 'No metrics logged'}")
+            print(f"Total Classes Registered: {result[6]}")
+            print("=" * 60)
+            return result
         else:
-            # Query all members from the view
-            cur.execute("""
-                SELECT member_id, first_name, last_name, goal_description, 
-                       goal_target, last_metric_value, total_classes_registered
-                FROM MemberDashboardSimple
-                ORDER BY member_id;
-            """)
-            
-            results = cur.fetchall()
-            
-            if results:
-                print(f"\n=== All Members Dashboard (from MemberDashboardSimple VIEW) ===")
-                for row in results:
-                    print(f"\n[Member {row[0]}] {row[1]} {row[2]}")
-                    print(f"  Goal: {row[3]} (Target: {row[4]})")
-                    print(f"  Last Metric: {row[5] if row[5] else 'None'}")
-                    print(f"  Classes: {row[6]}")
-                print("=" * 60)
-                return results
-            else:
-                print("No members found in the system.")
-                return []
+            print(f"✗ No member found with ID: {member_id}")
+            return None
                 
     except Exception as e:
         print(f"Error: {e}")
@@ -319,61 +289,6 @@ def create_class(admin_id, name, description=None, difficulty=None, category=Non
         conn.rollback()
         print(f"Error: {e}")
         return None
-    finally:
-        cur.close()
-        conn.close()
-
-
-def update_class(class_id, name=None, description=None, difficulty=None, category=None, duration_minutes=None, admin_id=None):
-    conn = get_connection()
-    cur = conn.cursor()
-    
-    try:
-        # Check if class exists
-        cur.execute("SELECT 1 FROM Class WHERE class_id = %s", (class_id,))
-        if not cur.fetchone():
-            print(f"Error: Class ID {class_id} not found")
-            return False
-        
-        # Build update query dynamically
-        updates = []
-        values = []
-        
-        if name is not None:
-            updates.append("name = %s")
-            values.append(name)
-        if description is not None:
-            updates.append("description = %s")
-            values.append(description)
-        if difficulty is not None:
-            updates.append("difficulty = %s")
-            values.append(difficulty)
-        if category is not None:
-            updates.append("category = %s")
-            values.append(category)
-        if duration_minutes is not None:
-            updates.append("duration_minutes = %s")
-            values.append(duration_minutes)
-        if admin_id is not None:
-            updates.append("admin_id = %s")
-            values.append(admin_id)
-        
-        if not updates:
-            print("Error: No fields provided to update")
-            return False
-        
-        values.append(class_id)
-        query = f"UPDATE Class SET {', '.join(updates)} WHERE class_id = %s"
-        
-        cur.execute(query, values)
-        conn.commit()
-        print(f"Success! Class {class_id} updated")
-        return True
-        
-    except Exception as e:
-        conn.rollback()
-        print(f"Error: {e}")
-        return False
     finally:
         cur.close()
         conn.close()

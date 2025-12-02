@@ -164,12 +164,6 @@ Execute the Data Definition Language script to create tables, triggers, views, a
 \i 'C:/Users/kharo/OneDrive/Bureau/health-fitness-club-management-system/sql//DDL.sql';
 ```
 
-The DDL includes:
-- All entity tables with primary and foreign key constraints
-- **Trigger**: `trg_check_trainer_availability_time` for validating time ranges
-- **View**: `MemberDashboardSimple` for aggregated member statistics
-- **Index**: `idx_member_email` for optimized email searches
-
 ### 4. Run DML Script
 
 Load sample data:
@@ -210,21 +204,9 @@ Each operation offers two modes:
 1. **Manual Entry** - Enter data interactively
 2. **Pre-filled Data** - Automatically tests both SUCCESS and FAILURE cases
 
-**Every prefilled operation tests:**
-- ✅ **SUCCESS CASE**: Valid data that should work
-- ❌ **FAILURE CASE**: Invalid data to demonstrate error handling
-
-**Examples:**
-- **OP1**: Valid registration vs. duplicate email
-- **OP2**: Existing email vs. non-existent email (INDEX)
-- **OP3**: Valid member vs. invalid member ID
-- **OP4**: Valid session vs. non-existent session
-- **OP5**: Valid times vs. invalid times blocked by TRIGGER
-- **OP6**: Existing member vs. non-existent member (VIEW)
-- **OP7**: Valid admin vs. invalid admin ID
-- **OP8**: Valid session vs. non-existent session/room
-
-This approach demonstrates comprehensive error handling and data validation across all operations.
+Every prefilled operation demonstrates:
+- ✅ **SUCCESS CASE**: Valid data that executes successfully
+- ❌ **FAILURE CASE**: Invalid data to show error handling
 
 ## Implemented Operations
 
@@ -258,12 +240,11 @@ This approach demonstrates comprehensive error handling and data validation acro
    - Demonstrates database-level data integrity enforcement
 
 6. **View Member Dashboard** ⭐ *Demonstrates VIEW*
-   - Queries the `MemberDashboardSimple` view
+   - Queries the `MemberDashboardSimple` view for a specific member
    - Displays aggregated member statistics:
      - Last recorded health metric
      - Total class registrations
      - Goal information
-   - Can view specific member or all members
    - Shows benefit of pre-computed aggregations
 
 ### Admin Operations
@@ -277,12 +258,6 @@ This approach demonstrates comprehensive error handling and data validation acro
    - Prevents room double-booking
    - Validates trainer availability
    - Ensures class and room exist
-
-### Database Features Demonstrated
-
-- **INDEX**: `idx_member_email` on Member(email) - Fast email lookups (OP2)
-- **TRIGGER**: `trg_check_trainer_availability_time` - Time validation (OP5)
-- **VIEW**: `MemberDashboardSimple` - Aggregated member statistics (OP6)
 
 All operations use parameterized SQL queries executed via `psycopg2` for security and performance.
 

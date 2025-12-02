@@ -1,11 +1,11 @@
 import sys
 import os
 
-# Get the parent folder (project root) and add it to Python's search path
+# Get the parent folder and add it to Python's search path
 
-current_file_location = os.path.dirname(__file__)  # Gets the 'app' folder
+current_file_location = os.path.dirname(__file__)  
 
-parent_folder = os.path.dirname(current_file_location)  # Goes up one level to project root
+parent_folder = os.path.dirname(current_file_location)  
 
 sys.path.insert(0, parent_folder)
 
@@ -165,9 +165,8 @@ def trainer_menu():
                 prefilled_view_member_dashboard()
             else:
                 print("\n--- View Member Dashboard ---")
-                member_input = input("Member ID (or press Enter for all members): ").strip()
                 try:
-                    member_id = int(member_input) if member_input else None
+                    member_id = int(input("Member ID: ").strip())
                 except ValueError:
                     print("Error: Member ID must be a number.")
                     continue
@@ -184,12 +183,11 @@ def admin_menu():
     while True:
         print("\n--- ADMIN OPERATIONS ---")
         print("1. Create Class Template")
-        print("2. Update Class Template")
-        print("3. Schedule Class Session")
-        print("4. Reschedule Class Session")
-        print("5. Back to Main Menu")
+        print("2. Schedule Class Session")
+        print("3. Reschedule Class Session")
+        print("4. Back to Main Menu")
         
-        choice = input("Select option (1-5): ").strip()
+        choice = input("Select option (1-4): ").strip()
         
         if choice == "1":
             # OP7: Create Class
@@ -218,39 +216,6 @@ def admin_menu():
                 create_class(admin_id, name, description, difficulty, category, duration_minutes)
         
         elif choice == "2":
-            # OP7: Update Class
-            print("1. Manual Entry")
-            print("2. Pre-filled Data")
-            mode = input("Select mode: ").strip()
-            if mode == "2":
-                prefilled_update_class()
-            else:
-                print("\n--- Update Class Template ---")
-                try:
-                    class_id = int(input("Class ID: ").strip())
-                except ValueError:
-                    print("Error: Class ID must be a number.")
-                    continue
-                print("Leave blank to keep current value:")
-                name = input("New class name: ").strip() or None
-                description = input("New description: ").strip() or None
-                difficulty = input("New difficulty: ").strip() or None
-                category = input("New category: ").strip() or None
-                duration = input("New duration (minutes): ").strip()
-                try:
-                    duration_minutes = int(duration) if duration else None
-                except ValueError:
-                    print("Error: Duration must be a number. Keeping current value.")
-                    duration_minutes = None
-                admin_id = input("New admin ID: ").strip()
-                try:
-                    admin_id = int(admin_id) if admin_id else None
-                except ValueError:
-                    print("Error: Admin ID must be a number. Keeping current value.")
-                    admin_id = None
-                update_class(class_id, name, description, difficulty, category, duration_minutes, admin_id)
-        
-        elif choice == "3":
             # OP8: Schedule Class Session
             print("1. Manual Entry")
             print("2. Pre-filled Data")
@@ -276,7 +241,7 @@ def admin_menu():
                     continue
                 schedule_class_session(class_id, room_id, trainer_id, session_date, start_time, end_time, capacity)
         
-        elif choice == "4":
+        elif choice == "3":
             # OP8: Reschedule Class Session
             print("1. Manual Entry")
             print("2. Pre-filled Data")
@@ -314,7 +279,7 @@ def admin_menu():
                     capacity = None
                 reschedule_class_session(session_id, room_id, trainer_id, session_date, start_time, end_time, capacity)
         
-        elif choice == "5":
+        elif choice == "4":
             break
         
         else:

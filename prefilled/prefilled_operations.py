@@ -72,11 +72,11 @@ def prefilled_view_member_dashboard():
     """OP6: View Member Dashboard - Tests success and failure (VIEW)"""
     print("\n=== SUCCESS CASE ===")
     print(f"Viewing dashboard for Member ID {MEMBER_DASHBOARD_SUCCESS['member_id']}")
-    view_member_dashboard(**MEMBER_DASHBOARD_SUCCESS)
+    view_member_dashboard(MEMBER_DASHBOARD_SUCCESS['member_id'])
     
     print("\n=== FAILURE CASE (Non-existent Member) ===")
     print(f"Viewing dashboard for Member ID {MEMBER_DASHBOARD_FAILURE['member_id']}")
-    view_member_dashboard(**MEMBER_DASHBOARD_FAILURE)
+    view_member_dashboard(MEMBER_DASHBOARD_FAILURE['member_id'])
 
 
 def prefilled_create_class():
