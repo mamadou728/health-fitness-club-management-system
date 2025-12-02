@@ -205,23 +205,6 @@ prefilled/
 └── __init__.py
 ```
 
-### How It Works
-1. **Data Definition** (`prefilled_data.py`): Contains dictionaries with test data for each operation
-   - Each operation has two data sets: `*_SUCCESS` and `*_FAILURE`
-   - Data is based on existing records in `DML.sql` for consistency
-
-2. **Operation Wrappers** (`prefilled_operations.py`): Functions that call actual operations with prefilled data
-   - Each wrapper runs both SUCCESS and FAILURE tests automatically
-   - Displays what data is being used before execution
-   - Shows clear results for both cases
-
-3. **Integration** (`main.py`): Menu system offers prefilled option for every operation
-   - User selects "2. Pre-filled" instead of manual entry
-   - System automatically runs both test cases
-   - Results are displayed with clear success (✓) or failure (✗) indicators
-
-This system makes it easy to demonstrate all functionality without repeatedly entering test data manually.
-
 ## Implemented Operations
 
 ### Admin Operations
